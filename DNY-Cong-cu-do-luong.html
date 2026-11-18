@@ -174,12 +174,6 @@
 <label for="link">Link để dán vào bài Facebook</label>
 <textarea id="link" readonly></textarea>
 <button id="copy" type="button">Sao chép link</button>
-<details id="direct-link" hidden>
-<summary>Link gốc có mã đo</summary>
-<label for="original-link">Link trực tiếp đến DNY</label>
-<textarea id="original-link" readonly></textarea>
-<button id="copy-original" type="button">Sao chép link gốc</button>
-</details>
 </div>
 <p id="status" role="status"></p>
 </section>
@@ -380,17 +374,6 @@ function renderKeywords() {
 get('kw-filter').addEventListener('input', renderKeywords);
 get('kw-view').addEventListener('change', renderKeywords);
 renderKeywords();
-const trackingKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
-function shortFacebookLink(page, medium, campaign, post) {
-  if (page.origin !== 'https://dny.com.vn' || page.hash ||
-      [...page.searchParams.keys()].some(key => !trackingKeys.includes(key))) return null;
-  const route = /^\/([a-z0-9]+(?:-[a-z0-9]+)*)\.html$/.exec(page.pathname)?.[1];
-  if (!route && page.pathname !== '/') return null;
-  const encode = value => encodeURIComponent(value).replace(/~/g, '%7E');
-  const kind = medium === 'paid_social' ? 'p' : 'o';
-  return 'https://dnymarketing1708-a11y.github.io/dny-cong-cu-do-luong/r/?' +
-    [kind + (route ?? ''), encode(campaign), encode(post)].join('~');
-}
 get('builder').addEventListener('submit', event => {
   event.preventDefault();
   get('result').hidden = true;
@@ -410,14 +393,9 @@ get('builder').addEventListener('submit', event => {
   page.searchParams.set('utm_medium', medium);
   page.searchParams.set('utm_campaign', campaign);
   page.searchParams.set('utm_content', post);
-  const compact = shortFacebookLink(page, medium, campaign, post);
-  const useCompact = compact && compact.length < page.href.length;
-  get('link').value = useCompact ? compact : page.href;
-  get('original-link').value = page.href;
-  get('direct-link').hidden = !useCompact;
-  get('direct-link').open = false;
+  get('link').value = page.href;
   get('result').hidden = false;
-  get('status').textContent = useCompact ? 'Link ngắn đã sẵn sàng.' : 'Link trực tiếp đã sẵn sàng.';
+  get('status').textContent = 'Link DNY đã sẵn sàng.';
 });
 async function copyFacebookLink(field) {
   try {
@@ -429,6 +407,5 @@ async function copyFacebookLink(field) {
   }
 }
 get('copy').addEventListener('click', () => copyFacebookLink(get('link')));
-get('copy-original').addEventListener('click', () => copyFacebookLink(get('original-link')));
 </script>
 </html>
