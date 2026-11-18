@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Mở trang DNY SPORT</title>
+</head>
+<body>
+  <p id="status">Đang mở trang DNY SPORT…</p>
+  <p><a href="https://dny.com.vn/">Về trang chủ DNY SPORT</a></p>
+  <noscript>Cần bật JavaScript để mở đường dẫn rút gọn.</noscript>
+  <script>
+    try {
+      const [route, campaign, post, ...extra] = location.search.slice(1).split('&', 1)[0].split('~');
+      const match = /^([op])([a-z0-9]+(?:-[a-z0-9]+)*)?$/.exec(route);
+      if (!match || !campaign || !post || extra.length) throw new Error('Invalid link');
+      const [, kind, slug] = match;
+      const target = new URL(slug ? '/' + slug + '.html' : '/', 'https://dny.com.vn');
+      target.searchParams.set('utm_source', 'facebook');
+      target.searchParams.set('utm_medium', kind === 'p' ? 'paid_social' : 'organic_social');
+      target.searchParams.set('utm_campaign', decodeURIComponent(campaign));
+      target.searchParams.set('utm_content', decodeURIComponent(post));
+      const clickId = new URLSearchParams(location.search).get('fbclid');
+      if (clickId && /^[A-Za-z0-9_-]{1,512}$/.test(clickId)) target.searchParams.set('fbclid', clickId);
+      location.replace(target.href);
+    } catch {
+      document.getElementById('status').textContent = 'Đường dẫn này chưa hợp lệ.';
+    }
+  </script>
+</body>
+</html>
