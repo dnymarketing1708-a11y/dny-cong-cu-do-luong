@@ -1,0 +1,45 @@
+name: Sync Meta Insights
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: Number of completed Vietnam days to fetch
+        required: false
+        default: '14'
+  schedule:
+    # 02:20 UTC = 09:20 Asia/Ho_Chi_Minh. The previous day is complete.
+    - cron: '20 2 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: meta-insights-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fetch and publish aggregated insights
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+          META_GRAPH_API_VERSION: ${{ vars.META_GRAPH_API_VERSION }}
+          META_PAGE_METRICS: ${{ vars.META_PAGE_METRICS }}
+          META_DAYS: ${{ inputs.days || '14' }}
+        run: node scripts/sync-meta-insights.mjs
+      - name: Commit refreshed public data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/meta-insights.json
+          git diff --cached --quiet || git commit -m "chore: refresh Meta insights"
+          git push

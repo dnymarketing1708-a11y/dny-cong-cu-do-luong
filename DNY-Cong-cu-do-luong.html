@@ -140,6 +140,15 @@
 <p><a href="https://app.openseo.so/p/47a7ba64-bbce-40ee-9acf-be6c4ac6c871/settings/integrations" target="_blank" rel="noopener">Kiểm tra kết nối GA4 trong OpenSEO</a></p>
 </section>
 <section>
+<h2>Meta API và đối chiếu GA4</h2>
+<p id="meta-status" class="quiet" role="status">Đang tải dữ liệu Meta đã tổng hợp…</p>
+<p id="meta-period" class="quiet"></p>
+<div class="kpis" id="meta-kpis"></div>
+<div class="table-wrap" id="meta-table-wrap" hidden><table aria-label="Chỉ số Meta Ads theo ngày"><thead><tr><th scope="col">Ngày</th><th scope="col">Chi tiêu</th><th scope="col">Hiển thị</th><th scope="col">Tiếp cận</th><th scope="col">Nhấp link</th></tr></thead><tbody id="meta-rows"></tbody></table></div>
+<p id="meta-ga4" class="quiet"></p>
+<p class="quiet">Dữ liệu này là bản tổng hợp công khai do GitHub Actions cập nhật. Token Meta không nằm trong trang, tệp dữ liệu hay mã nguồn trình duyệt.</p>
+</section>
+<section>
 <h2>Đối chiếu Meta và GA4 · 04–17/11/2026</h2>
 <p><strong>Lượt xem Facebook tăng 7%, lượt nhấp liên kết giảm 23,9%.</strong> Phiên GA4 từ bốn miền Facebook giảm từ 110 xuống 57.</p>
 <div class="table-wrap"><table>
@@ -352,6 +361,48 @@ get('catalog-sort').addEventListener('change', renderCatalog);
 renderCatalog();
 renderReport();
 renderFacebook(report.facebook);
+function total(values) { return values.reduce((sum, value) => sum + Number(value || 0), 0); }
+function renderMetaInsights(data) {
+  const status = get('meta-status');
+  if (!data?.updatedAt || !data?.period) {
+    status.textContent = data?.status || 'Chưa có dữ liệu Meta API.';
+    return;
+  }
+  const ads = Array.isArray(data.ads) ? data.ads : [];
+  const pageSeries = Object.values(data.page || {});
+  const pageTotals = Object.fromEntries(pageSeries.map(metric => [metric.title, total(metric.values?.map(value => value.value) || [])]));
+  const sums = {
+    spend: total(ads.map(row => row.spend)), impressions: total(ads.map(row => row.impressions)),
+    reach: total(ads.map(row => row.reach)), linkClicks: total(ads.map(row => row.linkClicks))
+  };
+  status.textContent = `Đã đồng bộ ${new Date(data.updatedAt).toLocaleString('vi-VN', {timeZone: data.timezone || 'Asia/Ho_Chi_Minh'})}.`;
+  get('meta-period').textContent = `${data.period.since} đến ${data.period.until} · giờ ${data.timezone || 'Asia/Ho_Chi_Minh'}.`;
+  const cards = [
+    ['Chi tiêu quảng cáo', new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(sums.spend)],
+    ['Hiển thị quảng cáo', number.format(sums.impressions)], ['Tiếp cận quảng cáo', number.format(sums.reach)],
+    ['Nhấp link quảng cáo', number.format(sums.linkClicks)],
+    ...Object.entries(pageTotals).slice(0, 3).map(([label, value]) => [label, number.format(value)])
+  ];
+  for (const [label, value] of cards) {
+    const card = appendText(get('meta-kpis'), 'div', ''); card.className = 'kpi';
+    appendText(card, 'span', label); appendText(card, 'strong', value);
+  }
+  if (ads.length) {
+    get('meta-table-wrap').hidden = false;
+    for (const row of ads) {
+      const tableRow = get('meta-rows').insertRow();
+      for (const value of [row.date, new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(row.spend), number.format(row.impressions), number.format(row.reach), number.format(row.linkClicks)]) tableRow.insertCell().textContent = value;
+    }
+  }
+  const ga4 = report.facebook;
+  get('meta-ga4').textContent = ga4
+    ? `GA4 hiện có: ${ga4.period}, ${number.format(ga4.sources.reduce((sum, row) => sum + row[3], 0))} phiên từ bốn miền Facebook. Chỉ đối chiếu trực tiếp với Meta khi khoảng ngày, múi giờ và UTM trùng nhau.`
+    : 'Chưa có bộ đối chiếu GA4 cùng kỳ.';
+}
+fetch('./data/meta-insights.json', {cache: 'no-store'})
+  .then(response => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
+  .then(renderMetaInsights)
+  .catch(() => { get('meta-status').textContent = 'Chưa tải được tệp dữ liệu Meta đã tổng hợp. Kiểm tra lần chạy GitHub Actions và GitHub Pages.'; });
 function renderKeywords() {
   const filter = get('kw-filter').value.trim().toLocaleLowerCase('vi');
   const view = get('kw-view').value;
