@@ -149,7 +149,7 @@
 <p class="quiet">Dữ liệu này là bản tổng hợp công khai do GitHub Actions cập nhật. Token Meta không nằm trong trang, tệp dữ liệu hay mã nguồn trình duyệt.</p>
 </section>
 <section>
-<h2>Đối chiếu Meta và GA4 · 04–17/11/2026</h2>
+<h2>Đối chiếu Meta và GA4 · dữ liệu lịch sử 04–17/11/2026</h2>
 <p><strong>Lượt xem Facebook tăng 7%, lượt nhấp liên kết giảm 23,9%.</strong> Phiên GA4 từ bốn miền Facebook giảm từ 110 xuống 57.</p>
 <div class="table-wrap"><table>
 <thead><tr><th scope="col">Chỉ số Meta</th><th scope="col">04–10/11</th><th scope="col">11–17/11</th><th scope="col">Thay đổi</th></tr></thead>
@@ -378,10 +378,12 @@ function renderMetaInsights(data) {
   status.textContent = `Đã đồng bộ ${new Date(data.updatedAt).toLocaleString('vi-VN', {timeZone: data.timezone || 'Asia/Ho_Chi_Minh'})}.`;
   get('meta-period').textContent = `${data.period.since} đến ${data.period.until} · giờ ${data.timezone || 'Asia/Ho_Chi_Minh'}.`;
   const cards = [
-    ['Chi tiêu quảng cáo', new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(sums.spend)],
-    ['Hiển thị quảng cáo', number.format(sums.impressions)], ['Tiếp cận quảng cáo', number.format(sums.reach)],
-    ['Nhấp link quảng cáo', number.format(sums.linkClicks)],
-    ...Object.entries(pageTotals).slice(0, 3).map(([label, value]) => [label, number.format(value)])
+    ...(ads.length ? [
+      ['Chi tiêu quảng cáo', new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(sums.spend)],
+      ['Hiển thị quảng cáo', number.format(sums.impressions)], ['Tiếp cận quảng cáo', number.format(sums.reach)],
+      ['Nhấp link quảng cáo', number.format(sums.linkClicks)]
+    ] : []),
+    ...Object.entries(pageTotals).map(([label, value]) => [label, number.format(value)])
   ];
   for (const [label, value] of cards) {
     const card = appendText(get('meta-kpis'), 'div', ''); card.className = 'kpi';
@@ -395,9 +397,9 @@ function renderMetaInsights(data) {
     }
   }
   const ga4 = report.facebook;
-  get('meta-ga4').textContent = ga4
+  get('meta-ga4').textContent = `${data.status || ''} ${ga4
     ? `GA4 hiện có: ${ga4.period}, ${number.format(ga4.sources.reduce((sum, row) => sum + row[3], 0))} phiên từ bốn miền Facebook. Chỉ đối chiếu trực tiếp với Meta khi khoảng ngày, múi giờ và UTM trùng nhau.`
-    : 'Chưa có bộ đối chiếu GA4 cùng kỳ.';
+    : 'Chưa có bộ đối chiếu GA4 cùng kỳ.'}`;
 }
 fetch('./data/meta-insights.json', {cache: 'no-store'})
   .then(response => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
