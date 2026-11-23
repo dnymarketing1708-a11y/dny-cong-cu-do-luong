@@ -162,7 +162,7 @@
 <tr><th scope="row">Lượt theo dõi</th><td>34</td><td>23</td><td>-32,4%</td></tr>
 </tbody></table></div>
 <p><strong>Kiểm tra trước hai ngày giảm mạnh.</strong> Ngày 12/11 có 126 lượt nhấp, so với 236 ngày 05/11. Ngày 13/11 có 142, so với 233 ngày 06/11. Hai cặp ngày cùng thứ giảm 201 lượt, khoảng 70% mức giảm ròng. Kiểm tra bài có link, đích của link và phân phối tự nhiên hoặc trả phí trong báo cáo Nội dung.</p>
-<p class="quiet">Nguồn là sáu tệp Meta do DNY xuất, mỗi tệp đủ 14 ngày. Người xem là trung bình theo ngày. Tệp tổng hợp không có bài đăng, đích liên kết, phần tách quảng cáo hay múi giờ. Lượt nhấp Meta và phiên GA4 có phạm vi đo riêng.</p>
+<p class="quiet">Đây là đối chiếu lịch sử 04–17/11. Số Meta mới nhất được hiển thị riêng tại mục “Meta API và đối chiếu GA4”, hiện lấy từ tệp xuất Business Suite đến 22/11. Lượt nhấp Meta và phiên GA4 có phạm vi đo riêng.</p>
 </section>
 <section>
 <h2>Kiểm tra kỹ thuật · OpenSEO</h2>
@@ -226,6 +226,7 @@ const get = id => document.getElementById(id);
 const keywords = JSON.parse(get('kw-data').textContent);
 const number = new Intl.NumberFormat('vi-VN');
 const report = JSON.parse(get('dny-report-data').textContent);
+if (report.facebook?.campaign) report.facebook.campaign = report.facebook.campaign.replace('Meta có dữ liệu xuất đến 17/11.', 'Meta Business Suite CSV đã nhập đến 22/11.');
 const percent = new Intl.NumberFormat('vi-VN', {maximumFractionDigits: 2});
 const signed = new Intl.NumberFormat('vi-VN', {signDisplay: 'exceptZero', maximumFractionDigits: 2});
 
