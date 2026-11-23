@@ -7,10 +7,10 @@ Dashboard là GitHub Pages nên không được gọi Meta API trực tiếp. Wo
 1. Dùng tài khoản có vai trò quản trị viên đối với Facebook Page DNY và ad account DNY trong Meta Business Manager.
 2. Tạo Meta app loại Business, thêm Facebook Login hoặc luồng token phù hợp với mô hình Business Manager của DNY.
 3. Cấp cho system user/tài khoản tạo token các quyền tối thiểu:
-   - `pages_read_engagement` và `read_insights` để đọc Page Insights;
+   - `pages_show_list`, `pages_read_engagement` và `read_insights` để đọc Page Insights;
    - `ads_read` để đọc Ads Insights;
    - quyền truy cập Page và ad account tương ứng trong Business Settings.
-4. Dùng token dài hạn hoặc system-user token được phê duyệt cho môi trường production. Không dùng token cá nhân ngắn hạn cho lịch tự động. Thiết lập lịch xoay token, ghi chủ sở hữu và ngày hết hạn nội bộ.
+4. Dùng system-user token được phê duyệt cho môi trường production. Workflow dùng token này để lấy Page access token nội bộ cho đúng Page, rồi dùng Page token đó chỉ cho Page Insights; Ads Insights vẫn dùng system-user token. Không dùng token cá nhân ngắn hạn cho lịch tự động. Thiết lập lịch xoay token, ghi chủ sở hữu và ngày hết hạn nội bộ.
 
 Meta có thể yêu cầu App Review/Business Verification tùy app, vai trò người dùng và môi trường. Kiểm tra token bằng công cụ Access Token Debugger; chỉ kiểm tra quyền và ngày hết hạn, không dán token vào issue, chat hay log.
 

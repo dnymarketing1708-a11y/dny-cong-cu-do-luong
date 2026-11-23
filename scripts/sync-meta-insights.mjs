@@ -23,21 +23,21 @@ const zonedDate = (offsetDays) => {
 const since = zonedDate(days);
 const until = zonedDate(1);
 
-async function graph(path, params) {
+async function graph(path, params, accessToken = token) {
   const url = new URL(`https://graph.facebook.com/${version}/${path}`);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-  const response = await fetch(url, {headers: {Authorization: `Bearer ${token}`}});
+  const response = await fetch(url, {headers: {Authorization: `Bearer ${accessToken}`}});
   const body = await response.json();
   if (!response.ok) throw new Error(body?.error?.message || `Meta API returned ${response.status}`);
   return body;
 }
 
-async function allPages(path, params) {
-  const first = await graph(path, params);
+async function allPages(path, params, accessToken = token) {
+  const first = await graph(path, params, accessToken);
   const rows = [...(first.data || [])];
   let next = first.paging?.next;
   while (next) {
-    const response = await fetch(next, {headers: {Authorization: `Bearer ${token}`}});
+    const response = await fetch(next, {headers: {Authorization: `Bearer ${accessToken}`}});
     const body = await response.json();
     if (!response.ok) throw new Error(body?.error?.message || `Meta pagination returned ${response.status}`);
     rows.push(...(body.data || []));
@@ -51,8 +51,14 @@ function number(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+const availablePages = await allPages('me/accounts', {fields: 'id,name,access_token,tasks', limit: '100'});
+const targetPage = availablePages.find(page => String(page.id) === String(pageId));
+if (!targetPage?.access_token) {
+  throw new Error('The system user cannot obtain a Page access token. Assign the Page with ANALYZE access and add pages_show_list.');
+}
+
 const [pageRows, adsRows] = await Promise.all([
-  allPages(`${pageId}/insights`, {metric: pageMetrics.join(','), period: 'day', since, until}),
+  allPages(`${pageId}/insights`, {metric: pageMetrics.join(','), period: 'day', since, until}, targetPage.access_token),
   allPages(`${accountId}/insights`, {
     fields: 'date_start,date_stop,spend,impressions,reach,clicks,inline_link_clicks,actions',
     level: 'account', time_increment: '1', time_range: JSON.stringify({since, until}), limit: '100'
