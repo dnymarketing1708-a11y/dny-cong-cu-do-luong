@@ -7,9 +7,6 @@ on:
         description: Number of completed Vietnam days to fetch
         required: false
         default: '14'
-  schedule:
-    # 02:00 UTC = 09:00 Asia/Ho_Chi_Minh. The previous day is complete.
-    - cron: '0 2 * * *'
 
 permissions:
   contents: write
