@@ -226,7 +226,22 @@ const get = id => document.getElementById(id);
 const keywords = JSON.parse(get('kw-data').textContent);
 const number = new Intl.NumberFormat('vi-VN');
 const report = JSON.parse(get('dny-report-data').textContent);
-if (report.facebook?.campaign) report.facebook.campaign = report.facebook.campaign.replace('Meta có dữ liệu xuất đến 17/11.', 'Meta Business Suite CSV đã nhập đến 22/11.');
+Object.assign(report, {
+  updated: '25/11/2026',
+  period: '25/10–21/11/2026',
+  previous: '27/09–24/10/2026',
+  gsc: [979, 900, 77828, 68728],
+  gaStatus: 'GA4 thuộc tính DNY 289839519 · luồng G-XP4E9ZV3M1 · Asia/Saigon. Kỳ 25/10–21/11/2026 có 5.063 lượt xem trên hai hostname DNY.'
+});
+if (report.gaReports?.[0]) {
+  report.gaReports[0] = {
+    title: 'Trang được xem nhiều nhất',
+    notes: '25/10–21/11/2026 · giờ Việt Nam · mọi kênh. Đã đọc 599 URL trên dny.com.vn và www.dny.com.vn. Tổng 5.063 lượt xem trang.',
+    columns: ['Trang', 'Lượt xem'],
+    rows: [['Trang chủ', '852'], ['/bong-da-viet-nam-34-tinh-thanh.html', '286'], ['/ao-khoac.html', '137'], ['/ao-bong-chay.html', '118'], ['/ao-bong-da.html', '107'], ['/font-so-chu.html', '103'], ['/sanpham/danhmuc1/10/20', '85'], ['/ao-cau-long.html', '79'], ['/ao-bong-chuyen.html', '72'], ['/tap-gym-cho-nguoi-moi-bat-dau-huong-dan-day-du-tu-a-den-z.html', '70']]
+  };
+}
+if (report.facebook?.campaign) report.facebook.campaign = report.facebook.campaign.replace('Meta có dữ liệu xuất đến 17/11.', 'Meta Business Suite CSV đã nhập đến 24/11.');
 const percent = new Intl.NumberFormat('vi-VN', {maximumFractionDigits: 2});
 const signed = new Intl.NumberFormat('vi-VN', {signDisplay: 'exceptZero', maximumFractionDigits: 2});
 
