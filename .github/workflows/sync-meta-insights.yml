@@ -8,8 +8,8 @@ on:
         required: false
         default: '14'
   schedule:
-    # 02:20 UTC = 09:20 Asia/Ho_Chi_Minh. The previous day is complete.
-    - cron: '20 2 * * *'
+    # 02:00 UTC = 09:00 Asia/Ho_Chi_Minh. The previous day is complete.
+    - cron: '0 2 * * *'
 
 permissions:
   contents: write
