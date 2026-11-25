@@ -247,7 +247,7 @@ function appendLink(parent, label, url) {
 }
 
 function renderReport() {
-  get('report-date').textContent = `Dữ liệu lưu ngày ${report.updated}. Tải lại trang sau khi báo cáo được cập nhật.`;
+  get('report-date').textContent = `Báo cáo SEO lưu ngày ${report.updated}. Dữ liệu Facebook được cập nhật riêng ở mục Meta API và đối chiếu GA4.`;
   get('report-period').textContent = `${report.period} so với ${report.previous} · https://dny.com.vn/ · Google Web đã hoàn tất · mọi thiết bị và quốc gia · ngày theo Search Console.`;
   const [oldClicks, clicks, oldImpressions, impressions] = report.gsc;
   const ctr = impressions ? clicks / impressions * 100 : 0;
@@ -378,6 +378,8 @@ function renderMetaInsights(data) {
   };
   status.textContent = `Đã đồng bộ ${new Date(data.updatedAt).toLocaleString('vi-VN', {timeZone: data.timezone || 'Asia/Ho_Chi_Minh'})}.`;
   get('meta-period').textContent = `${data.period.since} đến ${data.period.until} · giờ ${data.timezone || 'Asia/Ho_Chi_Minh'}.`;
+  const facebookDate = data.period.until.split('-').reverse().join('/');
+  get('report-date').textContent = `Báo cáo SEO lưu ngày ${report.updated} · Dữ liệu Facebook đến ${facebookDate}.`;
   const cards = [
     ...(ads.length ? [
       ['Chi tiêu quảng cáo', new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(sums.spend)],
