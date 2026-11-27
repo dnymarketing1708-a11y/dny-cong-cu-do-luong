@@ -46,6 +46,7 @@
 </section>
 <section>
 <h2>Việc nên cải thiện</h2>
+<p class="quiet">Các đề xuất chính dựa trên dữ liệu lưu ngày 23/11/2026; cần đối chiếu lại trước khi thực hiện.</p>
 <div id="report-actions"></div>
 <details>
 <summary>Cơ hội và vấn đề ở các danh mục khác</summary>
@@ -108,6 +109,7 @@
 </section>
 <section>
 <h2>Trang tăng hiển thị trên Google</h2>
+<p class="quiet">Dữ liệu lưu ngày 23/11/2026: kỳ 24/10–20/11 so với 26/09–23/10/2026.</p>
 <p id="report-growing"></p>
 <div class="table-wrap"><table>
 <thead><tr><th scope="col">Trang</th><th scope="col">Hiển thị trước → nay</th><th scope="col">Mức tăng</th><th scope="col">Nhấp trước → nay</th><th scope="col">Vị trí trước → nay</th></tr></thead>
@@ -146,7 +148,7 @@
 <div class="kpis" id="meta-kpis"></div>
 <div class="table-wrap" id="meta-table-wrap" hidden><table aria-label="Chỉ số Meta Ads theo ngày"><thead><tr><th scope="col">Ngày</th><th scope="col">Chi tiêu</th><th scope="col">Hiển thị</th><th scope="col">Tiếp cận</th><th scope="col">Nhấp link</th></tr></thead><tbody id="meta-rows"></tbody></table></div>
 <p id="meta-ga4" class="quiet"></p>
-<p class="quiet">Dữ liệu này là bản tổng hợp công khai do GitHub Actions cập nhật. Token Meta không nằm trong trang, tệp dữ liệu hay mã nguồn trình duyệt.</p>
+<p class="quiet">Dữ liệu Facebook được nhập từ tệp CSV khi có số liệu mới.</p>
 </section>
 <section>
 <h2>Đối chiếu Meta và GA4 · dữ liệu lịch sử 04–17/11/2026</h2>
@@ -162,7 +164,7 @@
 <tr><th scope="row">Lượt theo dõi</th><td>34</td><td>23</td><td>-32,4%</td></tr>
 </tbody></table></div>
 <p><strong>Kiểm tra trước hai ngày giảm mạnh.</strong> Ngày 12/11 có 126 lượt nhấp, so với 236 ngày 05/11. Ngày 13/11 có 142, so với 233 ngày 06/11. Hai cặp ngày cùng thứ giảm 201 lượt, khoảng 70% mức giảm ròng. Kiểm tra bài có link, đích của link và phân phối tự nhiên hoặc trả phí trong báo cáo Nội dung.</p>
-<p class="quiet">Đây là đối chiếu lịch sử 04–17/11. Số Meta mới nhất được hiển thị riêng tại mục “Meta API và đối chiếu GA4”, hiện lấy từ tệp xuất Business Suite đến 22/11. Lượt nhấp Meta và phiên GA4 có phạm vi đo riêng.</p>
+<p class="quiet">Đây là đối chiếu lịch sử 04–17/11. Số Meta mới nhất được hiển thị riêng tại mục “Meta API và đối chiếu GA4”, hiện lấy từ tệp xuất Business Suite đến 24/11. Lượt nhấp Meta và phiên GA4 có phạm vi đo riêng.</p>
 </section>
 <section>
 <h2>Kiểm tra kỹ thuật · OpenSEO</h2>
@@ -188,7 +190,7 @@
 </section>
 <section>
 <h2>Từ khóa khách tìm trên Google</h2>
-<p>So sánh vị trí trung bình trong hai kỳ ở trên. Bảng chỉ gồm truy vấn được Search Console trả về.</p>
+<p>Dữ liệu lưu ngày 23/11/2026: kỳ 24/10–20/11 so với 26/09–23/10/2026. Bảng chỉ gồm truy vấn được Search Console trả về.</p>
 <label for="kw-filter">Tìm từ khóa</label>
 <input id="kw-filter" placeholder="Ví dụ áo xe đạp">
 <label for="kw-view">Xem theo</label>
@@ -227,18 +229,18 @@ const keywords = JSON.parse(get('kw-data').textContent);
 const number = new Intl.NumberFormat('vi-VN');
 const report = JSON.parse(get('dny-report-data').textContent);
 Object.assign(report, {
-  updated: '25/11/2026',
-  period: '25/10–21/11/2026',
-  previous: '27/09–24/10/2026',
-  gsc: [979, 900, 77828, 68728],
-  gaStatus: 'GA4 thuộc tính DNY 289839519 · luồng G-XP4E9ZV3M1 · Asia/Saigon. Kỳ 25/10–21/11/2026 có 5.063 lượt xem trên hai hostname DNY.'
+  updated: '27/11/2026',
+  period: '27/10–23/11/2026',
+  previous: '29/09–26/10/2026',
+  gsc: [980, 868, 77219, 67408],
+  gaStatus: 'GA4 thuộc tính DNY 289839519 · luồng G-XP4E9ZV3M1 · Asia/Saigon. Kỳ 27/10–23/11/2026 có 5.044 lượt xem trên hai hostname DNY.'
 });
 if (report.gaReports?.[0]) {
   report.gaReports[0] = {
     title: 'Trang được xem nhiều nhất',
-    notes: '25/10–21/11/2026 · giờ Việt Nam · mọi kênh. Đã đọc 599 URL trên dny.com.vn và www.dny.com.vn. Tổng 5.063 lượt xem trang.',
+    notes: '27/10–23/11/2026 · giờ Việt Nam · mọi kênh. Đã đọc 614 dòng và gộp theo đường dẫn trên hai hostname DNY. Tổng 5.044 lượt xem trang.',
     columns: ['Trang', 'Lượt xem'],
-    rows: [['Trang chủ', '852'], ['/bong-da-viet-nam-34-tinh-thanh.html', '286'], ['/ao-khoac.html', '137'], ['/ao-bong-chay.html', '118'], ['/ao-bong-da.html', '107'], ['/font-so-chu.html', '103'], ['/sanpham/danhmuc1/10/20', '85'], ['/ao-cau-long.html', '79'], ['/ao-bong-chuyen.html', '72'], ['/tap-gym-cho-nguoi-moi-bat-dau-huong-dan-day-du-tu-a-den-z.html', '70']]
+    rows: [['Trang chủ', '816'], ['/bong-da-viet-nam-34-tinh-thanh.html', '291'], ['/ao-khoac.html', '140'], ['/ao-bong-chay.html', '117'], ['/ao-bong-da.html', '108'], ['/font-so-chu.html', '94'], ['/sanpham/danhmuc1/10/20', '84'], ['/ao-cau-long.html', '81'], ['/ao-bong-chuyen.html', '74'], ['/sanpham/danhmuc1/10/40', '58']]
   };
 }
 if (report.facebook?.campaign) report.facebook.campaign = report.facebook.campaign.replace('Meta có dữ liệu xuất đến 17/11.', 'Meta Business Suite CSV đã nhập đến 24/11.');
@@ -262,7 +264,7 @@ function appendLink(parent, label, url) {
 }
 
 function renderReport() {
-  get('report-date').textContent = `Báo cáo SEO lưu ngày ${report.updated}. Dữ liệu Facebook được cập nhật riêng ở mục Meta API và đối chiếu GA4.`;
+  get('report-date').textContent = `Tổng quan SEO và GA4 cập nhật ngày ${report.updated}. Các mục chi tiết có kỳ dữ liệu ghi riêng.`;
   get('report-period').textContent = `${report.period} so với ${report.previous} · https://dny.com.vn/ · Google Web đã hoàn tất · mọi thiết bị và quốc gia · ngày theo Search Console.`;
   const [oldClicks, clicks, oldImpressions, impressions] = report.gsc;
   const ctr = impressions ? clicks / impressions * 100 : 0;
@@ -394,7 +396,7 @@ function renderMetaInsights(data) {
   status.textContent = `Đã đồng bộ ${new Date(data.updatedAt).toLocaleString('vi-VN', {timeZone: data.timezone || 'Asia/Ho_Chi_Minh'})}.`;
   get('meta-period').textContent = `${data.period.since} đến ${data.period.until} · giờ ${data.timezone || 'Asia/Ho_Chi_Minh'}.`;
   const facebookDate = data.period.until.split('-').reverse().join('/');
-  get('report-date').textContent = `Báo cáo SEO lưu ngày ${report.updated} · Dữ liệu Facebook đến ${facebookDate}.`;
+  get('report-date').textContent = `Tổng quan SEO và GA4 cập nhật ngày ${report.updated} · Dữ liệu Facebook đến ${facebookDate}. Các mục chi tiết có kỳ riêng.`;
   const cards = [
     ...(ads.length ? [
       ['Chi tiêu quảng cáo', new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND', maximumFractionDigits: 0}).format(sums.spend)],
